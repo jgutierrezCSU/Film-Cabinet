@@ -14,7 +14,11 @@
     <script src="../js/sweetalert2.js"></script>
     <!-- Nunito Google Font -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:400,700" rel="stylesheet">
-    <title>Sign Up | Firebase Auth</title>
+    <title>Sign Up | Questionnair </title>
+    <!-- For survey -->
+    <!-- Your platform (jquery) scripts. -->
+
+
 </head>
 
 <body class="bg-light">
@@ -26,7 +30,7 @@
             <div class="col-lg-10 col-md-10 offset-lg-1 offset-md-1 bg-white shadow mb-5 border border-primary">
                 <div class="row">
                     <div class="col-lg-6 col-md-6 p-4 bg-primary divCover">
-                        <img src="../images/firebase_logo.png" alt="Firebase cover image">
+                        <img src="../images/firebase_logo.png" alt="Film Cabinet cover image">
                     </div>
                     <div class="col-lg-6 col-md-6 p-lg-5 p-md-5 px-3 py-4">
                         <div id="signUpForm">
@@ -61,6 +65,7 @@
                             </div>
                             <button type="button" class="btn btn-outline-primary text-uppercase mb-3"
                                 onclick="signUp()">Sign Up</button>
+
                             <p>Already a member? Sign in: <a href="../index.html"><strong
                                         class="text-primary text-uppercase showSignInForm">Sign In</strong></a></p>
                         </div>
@@ -69,6 +74,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -97,7 +103,6 @@
     <script src="https://www.gstatic.com/firebasejs/6.1.1/firebase-database.js"></script>
 
 
-
     <script>
         // Your web app's Firebase configuration
         var firebaseConfig = {
@@ -112,6 +117,8 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         //var database = firebase.database();
+
+
     </script>
 
     <!-- Custom JavaScript -->
