@@ -13,6 +13,7 @@ function checkUserFullName() {
         document.getElementById("userFullNameError").style.display = "none";
     }
 }
+
 //  Lastname Validation 
 function checkUserLastname() {
     var userLastname = document.getElementById("userLastname").value;
@@ -96,7 +97,6 @@ function signUp() {
 
             var user = firebase.auth().currentUser;
             var uid;
-            // console.log(user)
 
             if (user != null) {
                 uid = user.uid;
@@ -108,9 +108,9 @@ function signUp() {
                 userLastname: userLastname,
                 userEmail: userEmail,
                 userPassword: userPassword,
-                userFb: "https://www.facebook.com/",
-                userTw: "https://twitter.com/",
-                userGp: "https://plus.google.com/",
+                //  userFb: "https://www.facebook.com/",
+                // userTw: "https://twitter.com/",
+                //  userGp: "https://plus.google.com/",
                 userBio: "User biography",
                 userTookSurvey: "False",
             }
@@ -203,7 +203,7 @@ function signIn() {
 
 
 function updateProfile(user) {
-    console.log("in updateProfile")
+
     if (user) {
         //   User is signed in.
         let user = firebase.auth().currentUser;
@@ -216,19 +216,24 @@ function updateProfile(user) {
 
             document.getElementById("userPfFullName").innerHTML = dataSnapShot.val().userFullName;
             document.getElementById("userPfLastname").innerHTML = dataSnapShot.val().userLastname;
+            console.log(dataSnapShot.val().userFullName)
+            console.log(dataSnapShot.val().userLastname)
+
             // userEmail = dataSnapShot.val().userEmail;
             //userPassword = dataSnapShot.val().userPassword;
 
-            document.getElementById("userPfFb").setAttribute('href', dataSnapShot.val().userFb);
-            document.getElementById("userPfTw").setAttribute('href', dataSnapShot.val().userTw);
-            document.getElementById("userPfGp").setAttribute('href', dataSnapShot.val().userGp);
+
+            // document.getElementById("userPfFb").setAttribute('href', dataSnapShot.val().userFb);
+            // document.getElementById("userPfTw").setAttribute('href', dataSnapShot.val().userTw);
+            // document.getElementById("userPfGp").setAttribute('href', dataSnapShot.val().userGp);
             document.getElementById("userPfBio").innerHTML = dataSnapShot.val().userBio;
+            console.log(dataSnapShot.val().userBio)
+
+            console.log("in updateProfile")
         })
     } else {
         //   No user is signed in.
     }
-
-
 
 }
 
@@ -270,15 +275,15 @@ function showEditProfileForm() {
     document.getElementById("editProfileForm").style.display = "block"
     var userPfFullName = document.getElementById("userPfFullName").innerHTML;
     var userPfLastname = document.getElementById("userPfLastname").innerHTML;
-    var userPfFb = document.getElementById("userPfFb").getAttribute("href");
-    var userPfTw = document.getElementById("userPfTw").getAttribute("href");
-    var userPfGp = document.getElementById("userPfGp").getAttribute("href");
+    //var userPfFb = document.getElementById("userPfFb").getAttribute("href");
+    //var userPfTw = document.getElementById("userPfTw").getAttribute("href");
+    // var userPfGp = document.getElementById("userPfGp").getAttribute("href");
     var userPfBio = document.getElementById("userPfBio").innerHTML;
     document.getElementById("userFullName").value = userPfFullName;
     document.getElementById("userLastname").value = userPfLastname;
-    document.getElementById("userFacebook").value = userPfFb;
-    document.getElementById("userTwitter").value = userPfTw;
-    document.getElementById("userGooglePlus").value = userPfGp;
+    //document.getElementById("userFacebook").value = userPfFb;
+    // document.getElementById("userTwitter").value = userPfTw;
+    // document.getElementById("userGooglePlus").value = userPfGp;
     document.getElementById("userBio").value = userPfBio;
 }
 //  Hide edit profile form 
@@ -290,48 +295,48 @@ function hideEditProfileForm() {
 function saveProfile() {
     let userFullName = document.getElementById("userFullName").value
     let userLastname = document.getElementById("userLastname").value
-    let userFacebook = document.getElementById("userFacebook").value
-    let userTwitter = document.getElementById("userTwitter").value
-    let userGooglePlus = document.getElementById("userGooglePlus").value
+    // // let userFacebook = document.getElementById("userFacebook").value
+    // //let userTwitter = document.getElementById("userTwitter").value
+    // //let userGooglePlus = document.getElementById("userGooglePlus").value
     let userBio = document.getElementById("userBio").value
-    var userFullNameFormate = /^([A-Za-z.\s_-])/;
-    var checkUserFullNameValid = userFullName.match(userFullNameFormate);
-    if (checkUserFullNameValid == null) {
-        return checkUserFullName();
-    } else if (userLastname === "") {
-        return checkUserLastname();
-    } else {
+    // var userFullNameFormate = /^([A-Za-z.\s_-])/;
+    // var checkUserFullNameValid = userFullName.match(userFullNameFormate);
+    // if (checkUserFullNameValid == null) {
+    //     return checkUserFullName();
+    // } else if (userLastname === "") {
+    //     return checkUserLastname();
+    // } else {
 
-        let user = firebase.auth().currentUser;
-        let uid;
-        if (user != null) {
-            uid = user.uid;
-        }
-        let firebaseRefKey = firebase.database().ref().child(uid);
-        firebaseRefKey.on('value', (dataSnapShot) => {
-            var firebaseRef = firebase.database().ref();
-            var userData = {
-                // These parts are the info that user changed/ can change
-                userFullName: userFullName,
-                userLastname: userLastname,
-                userFb: userFacebook,
-                userTw: userTwitter,
-                userGp: userGooglePlus,
-                userBio: userBio,
-                //This part remains the same, get data from DB and input same info (unchaged) 
-                userEmail: dataSnapShot.val().userEmail,
-                userTookSurveySur: "True",
-            }
-            console.log("In Save Profile")
-            firebaseRef.child(uid).set(userData);
-        })
-
-        // document.getElementById("profileSection").style.display = "block";
-
-        // document.getElementById("editProfileForm").style.display = "none";
-        hideEditProfileForm();
-
+    let user = firebase.auth().currentUser;
+    let uid;
+    if (user != null) {
+        uid = user.uid;
     }
+    let firebaseRefKey = firebase.database().ref().child(uid);
+    firebaseRefKey.on('value', (dataSnapShot) => {
+        var firebaseRef = firebase.database().ref();
+        var userData = {
+            // These parts are the info that user changed/ can change
+            userFullName: userFullName,
+            userLastname: userLastname,
+            // userFb: userFacebook,
+            // userTw: userTwitter,
+            // userGp: userGooglePlus,
+            userBio: userBio,
+            //This part remains the same, get data from DB and input same info (unchaged) 
+            userEmail: dataSnapShot.val().userEmail,
+            userTookSurveySur: "True",
+        }
+        console.log("In Save Profile")
+        firebaseRef.child(uid).set(userData);
+    })
+
+    // document.getElementById("profileSection").style.display = "block";
+
+    // document.getElementById("editProfileForm").style.display = "none";
+    hideEditProfileForm();
+
+    //}
 }
 // Working For Sign Out 
 function signOut() {
@@ -409,7 +414,7 @@ function showTakeSurvey() {
 
 // }
 function setRetakeTestTrue() {
-    console.log("in setRetakeTestTrue")
+
     let user = firebase.auth().currentUser;
     let uid;
     if (user != null) {
