@@ -182,6 +182,11 @@ function signIn() {
     } else {
         firebase.auth().signInWithEmailAndPassword(userSIEmail, userSIPassword).then((success) => {
 
+            // Check firebase if "taken survey"
+            // if true update the button to "Retake Survey", else continue.
+            // let user = firebase.auth().currentUser;
+            // //console.log(user);
+            // checkIfTestTaken(user);
 
             window.location.replace("./pages/profile.html");
 
@@ -199,6 +204,10 @@ function signIn() {
 
 
     }
+
+    // Check here firebase if "taken survey"
+    // if true update the button to "Retake Survey", else continue.
+    //checkIfTestTaken();
 }
 
 
@@ -242,6 +251,8 @@ function updateProfile(user) {
 firebase.auth().onAuthStateChanged((user) => {
     console.log("onAuth")
     updateProfile(user);
+    checkIfTestTaken(user);
+
     // if (user) {
     //     //   User is signed in.
     //     let user = firebase.auth().currentUser;
@@ -387,40 +398,67 @@ function showTakeSurvey() {
         onComplete: sendDataToServer
     });
 
-    document.getElementById("takeSurveybtn").innerHTML = "Retake Survey";
-
     // set RetakeSurvey value to true
     setRetakeTestTrue();
+    // survey has been taken, set the element (button) to display "Retake Survey"
+    document.getElementById("takeSurveybtn").innerHTML = "Retake Survey";
+
+
 
 }
 
 
-// function checkIfTestTaken() {
-//     if (user) {
-//         //   User is signed in.
-//         let user = firebase.auth().currentUser;
-//         let uid
-//         if (user != null) {
-//             uid = user.uid;
-//         }
-//         let firebaseRefKey = firebase.database().ref().child(uid);
-//         firebaseRefKey.on('value', (dataSnapShot) => {
-//             if (dataSnapShot.val().userEmail == "True") {
-//                 document.getElementById("takeSurveybtn").innerHTML = "Retake Survey";
-//             }
-//         })
+function checkIfTestTaken(user) {
+    // let user = firebase.auth().currentUser;
 
-//     }
+    console.log("RTS", user);
+    if (user) {
+        console.log("USR OK");
+        //   User is signed in.
+        // let user = firebase.auth().currentUser;
+        let uid
+        if (user != null) {
+            uid = user.uid;
+        }
+        console.log("UID", uid);
+        let firebaseRefKey = firebase.database().ref().child(uid);
+        console.log("XXXXX");
+        firebaseRefKey.on('value', (dataSnapShot) => {
 
-// }
+            //console.log("YYYY", dataSnapShot.val().userTookSurveySur);
+            if (dataSnapShot.val().userTookSurveySur == "True") {
+                console.log(dataSnapShot.val().userTookSurveySur);
+                console.log("We in True Boys   ");
+                var elem = document.getElementById("takeSurveybtn");
+                console.log(elem.value);
+                console.log(elem);
+                //  WORK IN PROGRESS
+                if (elem.value == "Take Survey") {
+                    elem.value = "Re-Take Survey";
+                    console.log(elem);
+                }
+                else elem.value = "Re-Take Survey";
+                //document.getElementById("takeSurveybtn").innerHTML = "Retake Survey";
+            }
+
+        })
+
+    }
+
+}
+
+// this fumction is called after the user has taken the survey 
+// for the fisrt time
 function setRetakeTestTrue() {
 
+    //get current user
     let user = firebase.auth().currentUser;
     let uid;
     if (user != null) {
         uid = user.uid;
     }
 
+    //get users data from firebase
     let firebaseRefKey = firebase.database().ref().child(uid);
     firebaseRefKey.on('value', (dataSnapShot) => {
 
@@ -436,7 +474,7 @@ function setRetakeTestTrue() {
                 userTw: dataSnapShot.val().userTw,
                 userGp: dataSnapShot.val().userGp,
                 userBio: dataSnapShot.val().userBio,
-                userTookSurveySur: "True", // this only value we change
+                userTookSurveySur: "True", // this only value we change, set to true
             }
             //send that object to firebase
             firebaseRef.child(uid).set(userData);
