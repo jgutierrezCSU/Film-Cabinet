@@ -6,7 +6,7 @@ function checkUserFullName() {
     if (userLastname === "") {
         flag = true;
     }
-    console.log(flag)
+
     if (flag) {
         document.getElementById("userFullNameError").style.display = "block";
     } else {
@@ -69,6 +69,11 @@ function checkUserBio() {
         document.getElementById("userBioError").style.display = "none";
     }
 }
+
+function signInAfterSignUp() {
+
+}
+
 //  Submitting and Creating new user in firebase authentication 
 function signUp() {
     var userFullName = document.getElementById("userFullName").value;
@@ -115,11 +120,25 @@ function signUp() {
                 userTookSurvey: "False",
             }
             firebaseRef.child(uid).set(userData);
-            swal('Your Account Created', 'Your account was created successfully, you can log in now.',
-            ).then((value) => {
-                setTimeout(function () {
-                    window.location.replace("../index.html");
-                }, 1000)
+
+
+
+            Swal.fire({
+                title: 'Would you like to take the survey ?', // initial prompt title
+                showDenyButton: true, // No button
+                showCancelButton: false, // not used
+                confirmButtonText: `Yes`, // yes take to survey
+                denyButtonText: `No , Later`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    window.location.replace("survey.html"); // move to surevey.html
+
+                } else if (result.isDenied) {
+                    Swal.fire('Ensure to take the survey later for a more custom experience', '', 'info')
+                    window.location.replace("profile.html"); // move to surevey.html
+
+                }
             });
         }).catch((error) => {
             // Handle Errors here.
@@ -131,7 +150,9 @@ function signUp() {
                 text: "Error",
             })
         });
-    }
+    } // Create Email end
+
+
 }
 //  For Sign In / Index Form  Sign In Email Validation 
 function checkUserSIEmail() {
@@ -247,11 +268,12 @@ function updateProfile(user) {
 }
 
 // For Profile Page Get data from server and display
-//listener for log in / log out status
+// listener for log in / log out status
+
 firebase.auth().onAuthStateChanged((user) => {
     console.log("onAuth")
     updateProfile(user);
-    checkIfTestTaken(user);
+    //checkIfTestTaken(user);
 
     // if (user) {
     //     //   User is signed in.
@@ -406,7 +428,23 @@ function showTakeSurvey() {
 
 
 }
+function showTakeSurveyB() {
+    Survey.StylesManager.applyTheme("modern");
 
+    var surveyJSON = { "pages": [{ "name": "page1", "elements": [{ "type": "ranking", "name": "Rank your Favorite category", "title": "Rank your Favorite category ", "description": "Ranking Categories", "isRequired": true, "choices": ["Horror", "Romance", "Sci-FI", "Action", "Comedy"] }, { "type": "multipletext", "name": "last 3 series you watch", "title": "What was the last 3 series you watch ?", "description": "last 3 series you watch", "items": [{ "name": "Series 1" }, { "name": "Series 2" }, { "name": "Series 3" }] }, { "type": "panel", "name": "panel1", "elements": [{ "type": "html", "name": "question1", "html": "<h1> Are you a fan of any of these Producers ? </h1>" }] }, { "type": "boolean", "name": "Quentin Tarantino", "title": "Quentin Tarantino" }, { "type": "boolean", "name": "Kathleen Kennedy", "title": "Kathleen Kennedy" }, { "type": "boolean", "name": "Spike Lee", "title": "Spike Lee" }, { "type": "boolean", "name": "Kevin Feige", "title": "Kevin Feige" }] }], "showCompletedPage": false }
+
+    function sendDataToServer(survey) {
+        //send Ajax request to your web server.
+        alert("The results are:" + JSON.stringify(survey.data));
+    }
+
+    var survey = new Survey.Model(surveyJSON);
+    $("#surveyContainer").Survey({
+        model: survey,
+        onComplete: sendDataToServer
+    });
+
+}
 
 function checkIfTestTaken(user) {
     // let user = firebase.auth().currentUser;
@@ -432,7 +470,7 @@ function checkIfTestTaken(user) {
                 var elem = document.getElementById("takeSurveybtn");
                 console.log(elem.value);
                 console.log(elem);
-                //  WORK IN PROGRESS
+                //  WORK IN PROGRESS. DOES NOT WORK
                 if (elem.value == "Take Survey") {
                     elem.value = "Re-Take Survey";
                     console.log(elem);
