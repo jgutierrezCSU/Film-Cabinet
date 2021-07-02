@@ -20,4 +20,37 @@ a{
     width: 120px;
     height: 120px;
 }
+/** header will be changed to a banner or logo**/
+h1{
+    text-align: right;
+    color:rgb(3, 132, 186);
+    background-color: rgb(54, 69, 79);
+    font-size: 60px;
+    font-weight: 500;
+    font-family: 'Courier New', Courier, monospace;
+}
+h2{
+    text-align:left;
+    color:rgb(3, 132, 186);
+    font-size: 60px;
+    font-family: 'Courier New', Courier, monospace;
+}
+.categ{
+    text-align: center;
+    list-style-type: none;
+    font-weight: 700;
+    font-size:50px;
+    
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+
+#search{
+    text-align: right;
+    
+}
 

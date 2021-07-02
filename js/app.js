@@ -132,7 +132,7 @@ function signUp() {
             }).then((result) => {
                 /* Read more about isConfirmed, isDenied below */
                 if (result.isConfirmed) {
-                    window.location.replace("survey.html"); // move to surevey.html
+                    window.location.replace("surveyCopy.html"); // move to surevey.html
 
                 } else if (result.isDenied) {
                     Swal.fire('Ensure to take the survey later for a more custom experience', '', 'info')
@@ -421,30 +421,44 @@ function showTakeSurvey() {
     });
 
     // set RetakeSurvey value to true
-    setRetakeTestTrue();
+    // setRetakeTestTrue();
     // survey has been taken, set the element (button) to display "Retake Survey"
-    document.getElementById("takeSurveybtn").innerHTML = "Retake Survey";
+    //  document.getElementById("takeSurveybtn").innerHTML = "Retake Survey";
 
 
 
 }
-function showTakeSurveyB() {
+function showTakeSurveyCopy() {
     Survey.StylesManager.applyTheme("modern");
 
     var surveyJSON = { "pages": [{ "name": "page1", "elements": [{ "type": "ranking", "name": "Rank your Favorite category", "title": "Rank your Favorite category ", "description": "Ranking Categories", "isRequired": true, "choices": ["Horror", "Romance", "Sci-FI", "Action", "Comedy"] }, { "type": "multipletext", "name": "last 3 series you watch", "title": "What was the last 3 series you watch ?", "description": "last 3 series you watch", "items": [{ "name": "Series 1" }, { "name": "Series 2" }, { "name": "Series 3" }] }, { "type": "panel", "name": "panel1", "elements": [{ "type": "html", "name": "question1", "html": "<h1> Are you a fan of any of these Producers ? </h1>" }] }, { "type": "boolean", "name": "Quentin Tarantino", "title": "Quentin Tarantino" }, { "type": "boolean", "name": "Kathleen Kennedy", "title": "Kathleen Kennedy" }, { "type": "boolean", "name": "Spike Lee", "title": "Spike Lee" }, { "type": "boolean", "name": "Kevin Feige", "title": "Kevin Feige" }] }], "showCompletedPage": false }
 
-    function sendDataToServer(survey) {
+    function sendDataToServerMoveToProfile(survey) {
         //send Ajax request to your web server.
         alert("The results are:" + JSON.stringify(survey.data));
+        // move to profile page
+        window.location.replace("profile.html");
     }
+    function moveToProfilePage() {
+
+        window.location.replace("profile.html");
+    }
+
+
 
     var survey = new Survey.Model(surveyJSON);
     $("#surveyContainer").Survey({
         model: survey,
-        onComplete: sendDataToServer
+        onComplete: sendDataToServerMoveToProfile,
     });
 
+    // after test has been taken, boolean to true in FB database
+    setRetakeTestTrue();
+    // survey has been taken, set the element (button) to display "Retake Survey"
+    document.getElementById("takeSurveybtn").innerHTML = "Retake Survey";
+
 }
+
 
 function checkIfTestTaken(user) {
     // let user = firebase.auth().currentUser;
