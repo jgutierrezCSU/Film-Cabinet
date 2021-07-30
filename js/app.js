@@ -1,4 +1,5 @@
 // For Sign Up Form and Full Name Validation 
+//TEST
 function checkUserFullName() {
     var userLastname = document.getElementById("userFullName").value;
     console.log(userLastname)
